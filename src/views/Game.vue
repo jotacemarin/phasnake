@@ -6,8 +6,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import Snake from '@/components/Snake';
+import Snake from '../components/Snake';
 
 export default {
     name: 'Home',
