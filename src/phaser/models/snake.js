@@ -3,18 +3,18 @@ import {
     Math as PhaserMath,
     Actions as PhaserActions,
 } from "phaser";
-import { direction } from "../config";
+import { direction, gameSettings } from "../config";
 
 export class Snake {
     constructor(scene, x, y) {
         this.headPos = new Geom.Point(x, y);
         this.body = scene.physics.add.group();
-        this.head = this.body.create(x * 16, y * 16, 'tail');
+        this.head = this.body.create(x * 16, y * 16, 'body');
         this.head.setOrigin(0);
         this.tail = new Geom.Point(x, y);
         this.alive = true;
         this.moveTime = 0;
-        this.speed = 100;
+        this.speed = gameSettings.playerSpeed;
         this.heading = direction.RIGHT;
         this.direction = direction.RIGHT;
     }
@@ -73,7 +73,7 @@ export class Snake {
     }
 
     grow() {
-        const newPart = this.body.create(this.tail.x, this.tail.y, 'tail');
+        const newPart = this.body.create(this.tail.x, this.tail.y, 'body');
         newPart.setOrigin(0);
     }
 

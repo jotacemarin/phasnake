@@ -14,6 +14,7 @@ export const configPhaser = {
 
 export const gameSettings = {
     playerSpeed: 100,
+    label: 'Score: '
 };
 
 export const direction = {
