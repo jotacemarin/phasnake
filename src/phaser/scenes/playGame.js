@@ -1,9 +1,10 @@
 // Dependencies 
 import { Scene } from 'phaser';
 
-import { gameSettings } from "../config";
+import configPhaser, { gameSettings } from "../config";
 import Snake from '../models/snake';
 import Food from '../models/food';
+import Rotten from '../models/rotten';
 
 export class PlayGame extends Scene {
     constructor() {
@@ -11,15 +12,20 @@ export class PlayGame extends Scene {
     }
 
     create() {
-        this.snake = new Snake(this, 4, 4);
-        this.food = new Food(this, 3, 4);
+        this.background = this.add.tileSprite(0, 0, configPhaser.width, configPhaser.height, 'background');
+        this.background.setOrigin(0, 0);
+
+        this.snake = new Snake(this);
+        this.food = new Food(this);
+        this.rotten = new Rotten(this);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.label = this.add.text(4, 1, gameSettings.label + this.food.total, { font: '16px Cascadia Code SemiBold', fill: '#193300' });
+        this.label = this.add.text(4, 1, gameSettings.label + this.food.total, { font: '16px Cascadia Code SemiBold', fill: '#c5c106' });
         this.label.setDepth(10);
 
         this.physics.add.overlap(this.snake.body, this.food, this.collideWithFood, null, this);
+        this.physics.add.overlap(this.snake.body, this.rotten, this.collideWithRotten, null, this);
         this.physics.add.collider(this.snake.body, this.snake.body, this.snake.collideWithSelf, null, this);
     }
 
@@ -37,6 +43,7 @@ export class PlayGame extends Scene {
         }
 
         this.snake.update(time);
+        this.rotten.update(time);
     }
 
     collideWithFood() {
@@ -44,6 +51,13 @@ export class PlayGame extends Scene {
         this.label.text = gameSettings.label + this.food.total;
         if (collideWithFood) {
             this.food.repositionFood(this.snake);
+        }
+    }
+
+    collideWithRotten() {
+        const collideWithRotten = this.snake.collideWithRotten(this.snake, this.rotten);
+        if (collideWithRotten) {
+            this.rotten.repositionRotten(this.snake);
         }
     }
 }

@@ -5,6 +5,9 @@ import {
 } from "phaser";
 import { direction, gameSettings } from "../config";
 
+const { playerSpeed } = gameSettings;
+const { UP, DOWN, LEFT, RIGHT } = direction;
+
 export class Snake {
     constructor(scene, x, y) {
         this.headPos = new Geom.Point(x, y);
@@ -14,7 +17,7 @@ export class Snake {
         this.tail = new Geom.Point(x, y);
         this.alive = true;
         this.moveTime = 0;
-        this.speed = gameSettings.playerSpeed;
+        this.speed = playerSpeed;
         this.heading = direction.RIGHT;
         this.direction = direction.RIGHT;
     }
@@ -26,26 +29,26 @@ export class Snake {
     }
 
     faceLeft() {
-        if (this.direction === direction.UP || this.direction === direction.DOWN) {
-            this.heading = direction.LEFT;
+        if (this.direction === UP || this.direction === DOWN) {
+            this.heading = LEFT;
         }
     }
 
     faceRight() {
-        if (this.direction === direction.UP || this.direction === direction.DOWN) {
-            this.heading = direction.RIGHT;
+        if (this.direction === UP || this.direction === DOWN) {
+            this.heading = RIGHT;
         }
     }
     
     faceUp() {
-        if (this.direction === direction.LEFT || this.direction === direction.RIGHT) {
-            this.heading = direction.UP;
+        if (this.direction === LEFT || this.direction === RIGHT) {
+            this.heading = UP;
         }
     }
 
     faceDown() {
-        if (this.direction === direction.LEFT || this.direction === direction.RIGHT) {
-            this.heading = direction.DOWN;
+        if (this.direction === LEFT || this.direction === RIGHT) {
+            this.heading = DOWN;
         }
     }
 
@@ -53,16 +56,16 @@ export class Snake {
         if (!this.alive) return false;
 
         switch (this.heading) {
-            case direction.LEFT:
+            case LEFT:
                 this.headPos.x = PhaserMath.Wrap(this.headPos.x - 1, 0, 40);
                 break;
-            case direction.RIGHT:
+            case RIGHT:
                 this.headPos.x = PhaserMath.Wrap(this.headPos.x + 1, 0, 40);
                 break;
-            case direction.UP:
+            case UP:
                 this.headPos.y = PhaserMath.Wrap(this.headPos.y - 1, 0, 30);
                 break;
-            case direction.DOWN:
+            case DOWN:
                 this.headPos.y = PhaserMath.Wrap(this.headPos.y + 1, 0, 30);
                 break;
         }
@@ -84,6 +87,27 @@ export class Snake {
                 this.speed -= 5;
             }
             setTimeout(this.grow(), 80);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    collideWithRotten(snake, rotten) {
+        if (rotten.active && this.head.x === rotten.x && this.head.y === rotten.y) {
+            rotten.eat();
+            if (this.body.children.size <= 2) {
+                this.alive = false;
+            } else {
+                const array = this.body.children.getArray();
+                array.reverse().forEach((item, i) => {
+                    if (i < 2) {
+                        this.body.remove(item);
+                        item.active = false;
+                        item.destroy();
+                    }
+                });
+            }
             return true;
         } else {
             return false;
