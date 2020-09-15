@@ -1,4 +1,3 @@
-// Dependencies 
 import Phaser from 'phaser';
 
 export const configPhaser = {

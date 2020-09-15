@@ -1,5 +1,7 @@
-// Dependencies
-import { GameObjects, Math as PhaserMath } from "phaser";
+import {
+    GameObjects,
+    Math as PhaserMath,
+} from "phaser";
 
 export class Food extends GameObjects.Image {
     constructor(scene, x, y) {
@@ -8,10 +10,12 @@ export class Food extends GameObjects.Image {
         this.total = 0;
         scene.physics.world.enableBody(this);
         scene.children.add(this);
+        this.pickUpSound = scene.sound.add('audio_pickup');
     }
 
     eat() {
         this.total += 1;
+        this.pickUpSound.play();
         const x = PhaserMath.Between(0, 39);
         const y = PhaserMath.Between(0, 29);
         this.setPosition(x * 16, y * 16);

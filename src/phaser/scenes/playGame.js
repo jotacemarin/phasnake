@@ -17,6 +17,7 @@ export class PlayGame extends Scene {
 
         //  Create our keyboard controls
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.sound
 
         // Add Physics
         this.physics.add.overlap(this.snake.body, this.food, this.collideWithFood, null, this);

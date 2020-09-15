@@ -1,10 +1,7 @@
-// Dependencies 
 import { Game } from 'phaser';
 
-// Config
 import config from './config';
 
-// Scenes
 import BootGame from './scenes/bootGame';
 import PlayGame from './scenes/playGame';
 

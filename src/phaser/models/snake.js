@@ -1,16 +1,9 @@
-/* eslint-disable no-unused-vars */
-
-// Dependencies
 import {
     Geom,
     Math as PhaserMath,
     Actions as PhaserActions,
-    GameObjects,
-    Physics,
 } from "phaser";
 import { direction } from "../config";
-
-// Config
 
 export class Snake {
     constructor(scene, x, y) {
