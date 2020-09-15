@@ -9,7 +9,7 @@ export class Snake {
     constructor(scene, x, y) {
         this.headPos = new Geom.Point(x, y);
         this.body = scene.physics.add.group();
-        this.head = this.body.create(x * 16, y * 16, 'body');
+        this.head = this.body.create(x * 16, y * 16, 'tail');
         this.head.setOrigin(0);
         this.tail = new Geom.Point(x, y);
         this.alive = true;
@@ -73,20 +73,35 @@ export class Snake {
     }
 
     grow() {
-        const newPart = this.body.create(this.tail.x, this.tail.y, 'body');
+        const newPart = this.body.create(this.tail.x, this.tail.y, 'tail');
         newPart.setOrigin(0);
     }
 
     collideWithFood(snake, food) {
         if (this.head.x === food.x && this.head.y === food.y) {
-            this.grow();
             food.eat();
             if (this.speed > 20 && food.total % 5 === 0) {
                 this.speed -= 5;
             }
+            setTimeout(this.grow(), 80);
             return true;
         } else {
             return false;
+        }
+    }
+
+    collideWithSelf(first, last) {
+        const { x: xF, y: yF } = first;
+        const { x: xL, y: yL } = last;
+        const coords = [ xF, yF, xL, yL];
+        const counts = {};
+        coords.forEach(function(n) { counts[n] = (counts[n] || 0) + 1; });
+        const keys = Object.keys(counts);
+        if (keys.length === 2) {
+            const [m, n] = keys;
+            if (counts[m] === 2 && counts[n] === 2) {
+                this.snake.alive = false;
+            }
         }
     }
 
