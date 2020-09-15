@@ -3,16 +3,16 @@ import {
     Math as PhaserMath,
     Actions as PhaserActions,
 } from "phaser";
-import { direction, gameSettings } from "../config";
+import { direction, gameSettings, COLS, ROWS } from "../config";
 
-const { playerSpeed } = gameSettings;
+const { playerSpeed, pixelSize } = gameSettings;
 const { UP, DOWN, LEFT, RIGHT } = direction;
 
 export class Snake {
     constructor(scene, x, y) {
         this.headPos = new Geom.Point(x, y);
         this.body = scene.physics.add.group();
-        this.head = this.body.create(x * 16, y * 16, 'body');
+        this.head = this.body.create(x * pixelSize, y * pixelSize, 'body');
         this.head.setOrigin(0);
         this.tail = new Geom.Point(x, y);
         this.alive = true;
@@ -57,20 +57,20 @@ export class Snake {
 
         switch (this.heading) {
             case LEFT:
-                this.headPos.x = PhaserMath.Wrap(this.headPos.x - 1, 0, 40);
+                this.headPos.x = PhaserMath.Wrap(this.headPos.x - 1, 0, COLS);
                 break;
             case RIGHT:
-                this.headPos.x = PhaserMath.Wrap(this.headPos.x + 1, 0, 40);
+                this.headPos.x = PhaserMath.Wrap(this.headPos.x + 1, 0, COLS);
                 break;
             case UP:
-                this.headPos.y = PhaserMath.Wrap(this.headPos.y - 1, 0, 30);
+                this.headPos.y = PhaserMath.Wrap(this.headPos.y - 1, 0, ROWS);
                 break;
             case DOWN:
-                this.headPos.y = PhaserMath.Wrap(this.headPos.y + 1, 0, 30);
+                this.headPos.y = PhaserMath.Wrap(this.headPos.y + 1, 0, ROWS);
                 break;
         }
         this.direction = this.heading;
-        PhaserActions.ShiftPosition(this.body.getChildren(), this.headPos.x * 16, this.headPos.y * 16, 1, this.tail)
+        PhaserActions.ShiftPosition(this.body.getChildren(), this.headPos.x * pixelSize, this.headPos.y * pixelSize, 1, this.tail)
         this.moveTime = time + this.speed;
         return true;
     }
@@ -95,19 +95,8 @@ export class Snake {
 
     collideWithRotten(snake, rotten) {
         if (rotten.active && this.head.x === rotten.x && this.head.y === rotten.y) {
+            this.collitionWithActiveRotten();
             rotten.eat();
-            if (this.body.children.size <= 2) {
-                this.alive = false;
-            } else {
-                const array = this.body.children.getArray();
-                array.reverse().forEach((item, i) => {
-                    if (i < 2) {
-                        this.body.remove(item);
-                        item.active = false;
-                        item.destroy();
-                    }
-                });
-            }
             return true;
         } else {
             return false;
@@ -124,19 +113,38 @@ export class Snake {
         if (keys.length === 2) {
             const [m, n] = keys;
             if (counts[m] === 2 && counts[n] === 2) {
-                this.snake.alive = false;
+                this.alive = false;
             }
         }
     }
 
     updateGrid(grid) {
         this.body.children.each(segment => {
-            var bx = segment.x / 16;
-            var by = segment.y / 16;
+            var bx = segment.x / pixelSize;
+            var by = segment.y / pixelSize;
             grid[by][bx] = false;
         });
 
         return grid;
+    }
+
+    collitionWithActiveRotten() {
+        if (this.body.children.size <= 2) {
+            this.alive = false;
+        } else {
+            this.removeTails();
+        }
+    }
+
+    removeTails() {
+        const array = this.body.children.getArray();
+        array.reverse().forEach((item, i) => {
+            if (i < 2) {
+                this.body.remove(item);
+                item.active = false;
+                item.destroy();
+            }
+        });
     }
 }
 

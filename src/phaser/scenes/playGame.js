@@ -26,7 +26,7 @@ export class PlayGame extends Scene {
 
         this.physics.add.overlap(this.snake.body, this.food, this.collideWithFood, null, this);
         this.physics.add.overlap(this.snake.body, this.rotten, this.collideWithRotten, null, this);
-        this.physics.add.collider(this.snake.body, this.snake.body, this.snake.collideWithSelf, null, this);
+        this.physics.add.collider(this.snake.body, this.snake.body, this.snakeCollideWithSelf, null, this);
     }
 
     update(time) {
@@ -59,6 +59,10 @@ export class PlayGame extends Scene {
         if (collideWithRotten) {
             this.rotten.repositionRotten(this.snake);
         }
+    }
+
+    snakeCollideWithSelf(first, last) {
+        this.snake.collideWithSelf(first, last);
     }
 }
 
