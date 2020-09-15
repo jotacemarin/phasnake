@@ -6,33 +6,28 @@ import {
     Math as PhaserMath,
     Actions as PhaserActions,
     GameObjects,
+    Physics,
 } from "phaser";
 import { direction } from "../config";
 
 // Config
 
-export class SnakeHead extends GameObjects.Image {
+export class Snake {
     constructor(scene, x, y) {
-        super(scene, x * 16, y * 16, 'body', 0);
-        this.setOrigin(0);
-        scene.physics.world.enableBody(this);
-        scene.children.add(this);
+        this.headPos = new Geom.Point(x, y);
+        this.body = scene.physics.add.group();
+        this.head = this.body.create(x * 16, y * 16, 'body');
+        this.head.setOrigin(0);
+        this.tail = new Geom.Point(x, y);
         this.alive = true;
         this.moveTime = 0;
         this.speed = 100;
         this.heading = direction.RIGHT;
-        this.direction = direction.RIGHT; 
-        this.headPos = new Geom.Point(x, y);
-        /*
-        this.body = scene.physics.add.group();
-        this.head = this.body.create(x * 16, y * 16, 'body');
-        this.tail = Geom.Point(x, y);
-        */
+        this.direction = direction.RIGHT;
     }
 
     update(time) {
         if (time >= this.moveTime) {
-            // console.log(time);
             return this.move(time);
         }
     }
@@ -62,6 +57,8 @@ export class SnakeHead extends GameObjects.Image {
     }
 
     move(time) {
+        if (!this.alive) return false;
+
         switch (this.heading) {
             case direction.LEFT:
                 this.headPos.x = PhaserMath.Wrap(this.headPos.x - 1, 0, 40);
@@ -77,8 +74,7 @@ export class SnakeHead extends GameObjects.Image {
                 break;
         }
         this.direction = this.heading;
-        this.setX(this.headPos.x * 16);
-        this.setY(this.headPos.y * 16);
+        PhaserActions.ShiftPosition(this.body.getChildren(), this.headPos.x * 16, this.headPos.y * 16, 1, this.tail)
         this.moveTime = time + this.speed;
         return true;
     }
@@ -92,11 +88,24 @@ export class SnakeHead extends GameObjects.Image {
         if (this.head.x === food.x && this.head.y === food.y) {
             this.grow();
             food.eat();
+            if (this.speed > 20 && food.total % 5 === 0) {
+                this.speed -= 5;
+            }
             return true;
         } else {
             return false;
         }
     }
+
+    updateGrid(grid) {
+        this.body.children.each(segment => {
+            var bx = segment.x / 16;
+            var by = segment.y / 16;
+            grid[by][bx] = false;
+        });
+
+        return grid;
+    }
 }
 
-export default SnakeHead;
+export default Snake;
