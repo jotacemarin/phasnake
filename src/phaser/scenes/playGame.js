@@ -1,7 +1,7 @@
 // Dependencies 
 import { Scene } from 'phaser';
-
 import configPhaser, { gameSettings } from "../config";
+import { emitter } from '../utils';
 import Snake from '../models/snake';
 import Food from '../models/food';
 import Rotten from '../models/rotten';
@@ -62,15 +62,26 @@ export class PlayGame extends Scene {
         const collideWithRotten = this.snake.collideWithRotten(this.rotten);
         if (collideWithRotten) {
             this.rotten.repositionRotten(this.snake);
+            this.sendEventGameOver('eat rotten fruit');
         }
     }
 
     snakeCollideWithSelf(first, last) {
         this.snake.collideWithSelf(first, last);
+        this.sendEventGameOver('eat hermself');
     }
-
+    
     collideWithBuildingBlock(snake, block) {
         this.snake.collideWithBuildingBlock(block);
+        this.sendEventGameOver('stamp with wall');
+    }
+
+    sendEventGameOver(reason) {
+        const { alive } = this.snake;
+        if (!alive) {
+            const { total } = this.food;
+            emitter.emit('game_over', { reason, points: total });
+        }
     }
 }
 

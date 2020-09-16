@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { Math } from 'phaser';
 import { COLS, ROWS, gameSettings } from './config';
 
@@ -30,3 +31,5 @@ export const setPosition = (gameObject, validLocations) => {
         return false;
     }
 };
+
+export const emitter = new EventEmitter();
