@@ -1,4 +1,4 @@
-import Phaser, { Math } from 'phaser';
+import Phaser from 'phaser';
 
 const configPhaser = {
     type: Phaser.WEBGL,
@@ -27,10 +27,5 @@ export const direction = {
     LEFT: 2,
     RIGHT: 3,
 };
-
-export const randomPos = () => ({
-    x: Math.Between(0, COLS - 1) * gameSettings.pixelSize,
-    y: Math.Between(0, ROWS - 1) * gameSettings.pixelSize,
-});
 
 export default configPhaser;

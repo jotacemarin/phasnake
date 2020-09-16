@@ -1,15 +1,14 @@
-import {
-    Geom,
-    Math as PhaserMath,
-    Actions as PhaserActions,
-} from "phaser";
+import { Geom, Math as PhaserMath, Actions as PhaserActions } from "phaser";
 import { direction, gameSettings, COLS, ROWS } from "../config";
+import { matrizLayout } from '../utils';
 
 const { playerSpeed, pixelSize } = gameSettings;
 const { UP, DOWN, LEFT, RIGHT } = direction;
 
 export class Snake {
-    constructor(scene, x, y) {
+    constructor(scene) {
+        const x = PhaserMath.Between(0, COLS - 1)
+        const y = PhaserMath.Between(0, ROWS - 1)
         this.headPos = new Geom.Point(x, y);
         this.body = scene.physics.add.group();
         this.head = this.body.create(x * pixelSize, y * pixelSize, 'body');
@@ -80,7 +79,7 @@ export class Snake {
         newPart.setOrigin(0);
     }
 
-    collideWithFood(snake, food) {
+    collideWithFood(food) {
         if (this.head.x === food.x && this.head.y === food.y) {
             food.eat();
             if (this.speed > 20 && food.total % 5 === 0) {
@@ -93,7 +92,7 @@ export class Snake {
         }
     }
 
-    collideWithRotten(snake, rotten) {
+    collideWithRotten(rotten) {
         if (rotten.active && this.head.x === rotten.x && this.head.y === rotten.y) {
             this.collitionWithActiveRotten();
             rotten.eat();
@@ -118,14 +117,30 @@ export class Snake {
         }
     }
 
-    updateGrid(grid) {
+    findSnake() {
+        const grid = matrizLayout();
+
         this.body.children.each(segment => {
-            var bx = segment.x / pixelSize;
-            var by = segment.y / pixelSize;
+            const { x, y } = segment;
+            const bx = x / pixelSize;
+            const by = y / pixelSize;
             grid[by][bx] = false;
         });
 
         return grid;
+    }
+
+    validPositions() {
+        const grid = this.findSnake();
+        const validLocations = [];
+        for (let y = 0; y < ROWS; y++) {
+            for (let x = 0; x < COLS; x++) {
+                if (grid[y][x]) {
+                    validLocations.push({ x: x, y: y });
+                }
+            }
+        }
+        return validLocations;
     }
 
     collitionWithActiveRotten() {
@@ -145,6 +160,10 @@ export class Snake {
                 item.destroy();
             }
         });
+    }
+
+    collideWithBuildingBlock() {
+        this.alive = false;
     }
 }
 

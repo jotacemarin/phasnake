@@ -5,6 +5,7 @@ import configPhaser, { gameSettings } from "../config";
 import Snake from '../models/snake';
 import Food from '../models/food';
 import Rotten from '../models/rotten';
+import Obstacle from '../models/obstacule';
 
 export class PlayGame extends Scene {
     constructor() {
@@ -18,6 +19,7 @@ export class PlayGame extends Scene {
         this.snake = new Snake(this);
         this.food = new Food(this);
         this.rotten = new Rotten(this);
+        this.obstacule = new Obstacle(this);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -27,6 +29,7 @@ export class PlayGame extends Scene {
         this.physics.add.overlap(this.snake.body, this.food, this.collideWithFood, null, this);
         this.physics.add.overlap(this.snake.body, this.rotten, this.collideWithRotten, null, this);
         this.physics.add.collider(this.snake.body, this.snake.body, this.snakeCollideWithSelf, null, this);
+        this.physics.add.collider(this.snake.body, this.obstacule.body, this.collideWithBuildingBlock, null, this);
     }
 
     update(time) {
@@ -47,15 +50,16 @@ export class PlayGame extends Scene {
     }
 
     collideWithFood() {
-        const collideWithFood = this.snake.collideWithFood(this.snake, this.food);
+        const collideWithFood = this.snake.collideWithFood(this.food);
         this.label.text = gameSettings.label + this.food.total;
         if (collideWithFood) {
             this.food.repositionFood(this.snake);
+            this.obstacule.update(this);
         }
     }
 
     collideWithRotten() {
-        const collideWithRotten = this.snake.collideWithRotten(this.snake, this.rotten);
+        const collideWithRotten = this.snake.collideWithRotten(this.rotten);
         if (collideWithRotten) {
             this.rotten.repositionRotten(this.snake);
         }
@@ -63,6 +67,10 @@ export class PlayGame extends Scene {
 
     snakeCollideWithSelf(first, last) {
         this.snake.collideWithSelf(first, last);
+    }
+
+    collideWithBuildingBlock(snake, block) {
+        this.snake.collideWithBuildingBlock(block);
     }
 }
 
