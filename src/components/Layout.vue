@@ -9,12 +9,14 @@
         </v-main>
 
         <Footer />
+        <Snack />
     </v-app>
 </template>
 
 <script>
 import Topbar from './Topbar';
 import Footer from './Footer';
+import Snack from './Snack';
 
 export default {
     name: 'Layout',
@@ -22,6 +24,7 @@ export default {
     components: {
         Topbar,
         Footer,
+        Snack,
     },
 
     data: () => ({}),

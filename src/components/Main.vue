@@ -11,6 +11,7 @@
             <v-tab v-for="(link, i) in router_links"
                 :key="i"
                 :to="link.href"
+                :disabled="i == 1 && isPlaying"
             >
                 {{ link.label }}
                 <v-icon>{{ link.icon }}</v-icon>
@@ -28,6 +29,8 @@
     </Layout>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 import Layout from './Layout';
 
 export default {
@@ -51,5 +54,9 @@ export default {
             },
         ]
     }),
+
+    computed: {
+        ...mapGetters(['isPlaying'])
+    }
 }
 </script>

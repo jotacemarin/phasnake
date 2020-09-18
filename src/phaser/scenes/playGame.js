@@ -1,6 +1,6 @@
 // Dependencies 
 import { Scene } from 'phaser';
-import configPhaser, { gameSettings } from "../config";
+import configPhaser from "../config";
 import { emitter } from '../utils';
 import Snake from '../models/snake';
 import Food from '../models/food';
@@ -23,13 +23,12 @@ export class PlayGame extends Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.label = this.add.text(4, 1, gameSettings.label + this.food.total, { font: '16px Cascadia Code SemiBold', fill: '#c5c106' });
-        this.label.setDepth(10);
-
         this.physics.add.overlap(this.snake.body, this.food, this.collideWithFood, null, this);
         this.physics.add.overlap(this.snake.body, this.rotten, this.collideWithRotten, null, this);
         this.physics.add.collider(this.snake.body, this.snake.body, this.snakeCollideWithSelf, null, this);
         this.physics.add.collider(this.snake.body, this.obstacule.body, this.collideWithBuildingBlock, null, this);
+
+        emitter.emit('eat_food', this.food.total);
     }
 
     update(time) {
@@ -51,8 +50,8 @@ export class PlayGame extends Scene {
 
     collideWithFood() {
         const collideWithFood = this.snake.collideWithFood(this.food);
-        this.label.text = gameSettings.label + this.food.total;
         if (collideWithFood) {
+            emitter.emit('eat_food', this.food.total);
             this.food.repositionFood(this.snake);
             this.obstacule.update(this);
         }
