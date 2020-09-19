@@ -29,10 +29,12 @@ export default {
     beforeUpdate() {
         const { response, errors } = this;
         this.show = response || errors;
+        console.log('beforeUpdate', response, errors);
     },
 
     updated() {
         setTimeout(this.resetResponse, this.timeout);
+        console.log('updated');
     },
 
     methods: {

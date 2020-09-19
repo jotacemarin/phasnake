@@ -51,7 +51,7 @@ export default {
             {
                 label: 'Go to best scores',
                 action: self.goToBestScores,
-            }
+            },
         ],
     }),
 
@@ -100,12 +100,11 @@ export default {
             this.gameDestroy(true);
             this.gameLaunch();
             this.modalOpened = false;
-            console.log('retry');
         },
         goToBestScores() {
             this.$store.dispatch(SET_SCORE_ACTION, 0);
             this.$router.push('/best-scores');
-        }
+        },
     },
 }
 </script>

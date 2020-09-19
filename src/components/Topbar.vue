@@ -1,22 +1,21 @@
+<style lang="scss" scoped>
+    .custom-title {
+        font-size: 32px;
+        font-weight: bold;
+    }
+</style>
 <template>
     <v-app-bar app dark>
         <div class="d-flex align-center">
             <v-img
-                alt="Vuetify Logo"
+                alt="Phasnake Logo"
                 class="shrink mr-2"
                 contain
                 transition="scale-transition"
                 width="40"
-                :src="require('../assets/logo.png')"
+                :src="require('../assets/Fruit.png')"
             />
-            <v-img
-                alt="Vuetify Name"
-                class="shrink mt-1 hidden-sm-and-down"
-                contain
-                min-width="100"
-                width="100"
-                src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-            />
+            <span class="custom-title">Phasnake</span>
         </div>
 
         <v-spacer></v-spacer>

@@ -66,8 +66,11 @@ export class PlayGame extends Scene {
     }
 
     snakeCollideWithSelf(first, last) {
-        this.snake.collideWithSelf(first, last);
-        this.sendEventGameOver('eat hermself');
+        const { alive } = this.snake;
+        if (alive) {
+            this.snake.collideWithSelf(first, last);
+            this.sendEventGameOver('eat hermself');
+        }
     }
     
     collideWithBuildingBlock(snake, block) {

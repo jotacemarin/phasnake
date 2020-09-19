@@ -4,7 +4,7 @@
             <v-row justify="center" align="center">
                 <v-col cols="6" md="6" sm="12">
                     <v-text-field
-                        label="nickname"
+                        label="Nickname"
                         v-model="nickname"
                         :counter="20"
                         :rules="[v => !!v || 'Nickname is required']"
