@@ -65,7 +65,6 @@ export default {
 
     async mounted() {
         this.gameLibrary = await import(/* webpackChunkName: "phaser" */ '../phaser/index');
-        emitter.on('game_over', this.gameOver);
         emitter.on('eat_food', this.eatFood);
         this.downloaded = true;
         this.$nextTick(async () => this.gameLaunch());
@@ -78,6 +77,7 @@ export default {
         gameLaunch() {
             this.gameInstance = this.gameLibrary.launch(this.containerId);
             this.setPlaying(true);
+            emitter.once('game_over', this.gameOver);
         },
         gameDestroy(withCanvas = false) {
             if (this.gameInstance) {
