@@ -7,7 +7,7 @@ export const ScoresService = {
         return ApiService.post(RESOURCE, body);
     },
 
-    getBest() {
+    getBestScores() {
         return ApiService.get(RESOURCE);
     }
 };
