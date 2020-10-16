@@ -69,6 +69,7 @@ export default {
         this.downloaded = true;
         this.$nextTick(async () => this.gameLaunch());
     },
+
     destroyed() {
         this.gameDestroy();
     },
@@ -79,28 +80,34 @@ export default {
             this.setPlaying(true);
             emitter.once('game_over', this.gameOver);
         },
+
         gameDestroy(withCanvas = false) {
             if (this.gameInstance) {
                 this.gameInstance.destroy(withCanvas);
             }
         },
+
         gameOver() {
             const { nickname, currentScore: score } = this;
             this.$store.dispatch(SEND_NEW_SCORE_ACTION, { nickname, score });
             this.setPlaying();
             this.modalOpened = true;
         },
+
         setPlaying(isPlaying = false) {
             this.$store.dispatch(SET_PLAYING_ACTION, isPlaying);
         },
+
         eatFood(score) {
             this.$store.dispatch(SET_SCORE_ACTION, score);
         },
+
         retry() {
             this.gameDestroy(true);
             this.gameLaunch();
             this.modalOpened = false;
         },
+
         goToBestScores() {
             this.$store.dispatch(SET_SCORE_ACTION, 0);
             this.$router.push('/best-scores');

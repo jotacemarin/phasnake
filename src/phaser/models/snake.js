@@ -7,8 +7,8 @@ const { UP, DOWN, LEFT, RIGHT } = direction;
 
 export class Snake {
     constructor(scene) {
-        const x = PhaserMath.Between(0, COLS - 1)
-        const y = PhaserMath.Between(0, ROWS - 1)
+        const x = PhaserMath.Between(0, COLS - 1);
+        const y = PhaserMath.Between(0, ROWS - 1);
         this.headPos = new Geom.Point(x, y);
         this.body = scene.physics.add.group();
         this.head = this.body.create(x * pixelSize, y * pixelSize, 'body');

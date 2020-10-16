@@ -40,7 +40,7 @@ export default {
     methods: {
         setNick(nickname) {
             this.$store.dispatch(SET_NICK_ACTION, nickname);
-        }
-    }
+        },
+    },
 }
 </script>

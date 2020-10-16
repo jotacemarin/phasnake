@@ -7,7 +7,7 @@ export const ScoresService = {
         return ApiService.post(RESOURCE, body);
     },
 
-    getBestScores() {
-        return ApiService.get(RESOURCE);
+    getBestScores(limit = 10, lastRn = 0) {
+        return ApiService.get(`${RESOURCE}?limit=${limit}&lastRn=${lastRn}`);
     }
 };

@@ -5,6 +5,7 @@ const state = {
     nickname: null,
     score: 0,
     bestScores: [],
+    lastRn: 0,
     playing: false,
     loading: false,
     response: null,
@@ -20,6 +21,9 @@ const getters = {
     },
     bestScores(state) {
         return state.bestScores;
+    },
+    lastRn(state) {
+        return state.lastRn;
     },
     isPlaying(state) {
         return state.playing;

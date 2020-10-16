@@ -37,9 +37,7 @@ export default {
 
     methods: {
         resetResponse() {
-            if (this.show) {
-                this.$store.dispatch(RESET_RESPONSE_ACTION, null);
-            }
+            if (this.show) this.$store.dispatch(RESET_RESPONSE_ACTION, null);
         },
     },
 }

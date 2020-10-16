@@ -6,6 +6,7 @@ export const REQUEST_SUCCESS_MUTATION = "Mutation.requestSuccess";
 export const REQUEST_FAILED_MUTATION = "Mutation.requestFailed";
 export const RESET_RESPONSE_MUTATION = 'Mutation.resetResponse';
 export const GET_BEST_SCORES_MUTATION = 'Mutation.getBestScores';
+export const RESET_BEST_SCORES_MUTATION = 'Mutation.resetBestScores';
 
 export const mutations = {
     [SET_NICK_MUTATION](state, nickname) {
@@ -21,7 +22,10 @@ export const mutations = {
         state.loading = loading;
     },
     [GET_BEST_SCORES_MUTATION](state, payload) {
-        state.bestScores = payload;
+        state.bestScores = state.bestScores
+            .filter(el => el)
+            .concat(payload);
+        state.lastRn += payload.length;
         state.response = true;
     },
     [REQUEST_SUCCESS_MUTATION](state) {
@@ -35,6 +39,10 @@ export const mutations = {
         state.response = reset;
         state.errors = reset;
     },
+    [RESET_BEST_SCORES_MUTATION](state) {
+        state.bestScores = [];
+        state.lastRn = 0;
+    }
 };
 
 export default mutations;

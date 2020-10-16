@@ -26,7 +26,5 @@ export default {
         Footer,
         Snack,
     },
-
-    data: () => ({}),
 }
 </script>

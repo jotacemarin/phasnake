@@ -8,7 +8,8 @@
 <template>
     <Layout>
         <v-tabs icons-and-text grow>
-            <v-tab v-for="(link, i) in router_links"
+            <v-tab
+                v-for="(link, i) in router_links"
                 :key="i"
                 :to="link.href"
                 :disabled="i == 1 && isPlaying"
@@ -57,6 +58,6 @@ export default {
 
     computed: {
         ...mapGetters(['isPlaying'])
-    }
+    },
 }
 </script>
